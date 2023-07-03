@@ -1,0 +1,44 @@
+version: '3'
+services:
+  router:
+    container_name: router
+    build:
+      context: ./router
+      dockerfile: ./DockerFile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./files:/app/files
+  java-executor:
+    container_name: java-executor
+    build:
+      context: ./java-executor
+      dockerfile: ./DockerFile
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./files/java:/app/files
+    depends_on:
+      - router
+  python-executor:
+    container_name: python-executor
+    build:
+      context: ./python-executor
+      dockerfile: ./DockerFile
+    ports:
+      - "5002:5000"
+    volumes:
+      - ./files/python:/app/files
+    depends_on:
+      - router
+  dart-executor:
+    container_name: dart-executor
+    build:
+      context: ./dart-executor
+      dockerfile: ./DockerFile
+    ports:
+      - "5003:5000"
+    volumes:
+      - ./files/dart:/app/files
+    depends_on:
+      - router

@@ -1,0 +1,26 @@
+FROM python:slim
+
+# Install required dependencies
+RUN apt-get update && apt-get install -y curl git unzip
+
+# Download and install Dart SDK
+RUN curl -fsSL https://storage.googleapis.com/dart-archive/channels/stable/release/2.14.4/sdk/dartsdk-linux-x64-release.zip -o /tmp/dart-sdk.zip \
+    && unzip /tmp/dart-sdk.zip -d /usr/lib \
+    && rm /tmp/dart-sdk.zip
+
+# Set environment variables
+ENV PATH "$PATH:/usr/lib/dart-sdk/bin"
+ENV DART_SDK /usr/lib/dart-sdk
+ENV PUB_CACHE /root/.pub-cache
+
+# Install required Python packages
+RUN pip install flask
+
+WORKDIR /app
+
+EXPOSE 5000
+
+COPY api.py .
+COPY executor.py .
+
+CMD [ "python3", "api.py" ]

@@ -1,0 +1,18 @@
+FROM alpine:latest
+
+RUN apk update
+RUN apk add --no-cache python3-dev
+RUN apk add --no-cache py3-pip
+RUN pip3 install --upgrade pip
+RUN pip3 install flask
+
+ENV FLASK_APP=python-executor.py
+
+WORKDIR /app
+
+EXPOSE 5000
+
+COPY api.py .
+COPY executor.py .
+
+CMD [ "python3", "api.py" ]
